@@ -1,4 +1,4 @@
-package handler;
+package com.aws.lambda;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import static org.junit.Assert.assertEquals;
@@ -16,3 +16,4 @@ public class HandlerTest {
     String content = result.getBody();
   }
 }
+
