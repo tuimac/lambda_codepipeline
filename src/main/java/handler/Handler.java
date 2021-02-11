@@ -26,7 +26,6 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             final String pageContents = this.getMessage();
 
             String output = String.format("{ \"message\": \"hello world\", \"location\": \"%s\" }", pageContents);
-            String output = "test";
 
             return response
                     .withStatusCode(200)
