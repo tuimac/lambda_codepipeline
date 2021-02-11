@@ -2,5 +2,5 @@
 
 Run command below
 ```
-aws cloudformation create-stack --stack-name wordpress --region <your region> --template-body file://createFunction.yml
+aws cloudformation create-stack --stack-name test --region ap-northeast-1 --template-body file://createFunction.yml --capabilities CAPABILITY_NAMED_IAM
 ```

@@ -7,7 +7,7 @@ Parameters:
     Default: 10.0.0.0/26
 
 Resources:
-  DynamodbConnectionRole:
+  DynamoDBConnectionRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: DynamoDBConnection
@@ -42,7 +42,7 @@ Resources:
       Timeout: 900
       Handler: handler.Handler
       MemorySize: 128
-      Role: !Ref DynamoDBConnection
+      Role: !GetAtt DynamoDBConnectionRole.Arn
       FunctionName: test
       Tags:
         - Key: Name
