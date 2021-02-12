@@ -1,0 +1,20 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Transform" : [ "AWS::Serverless-2016-10-31" ],
+  "Description" : "Just handler",
+  "Resources" : {
+    "Handler" : {
+      "Type" : "AWS::Serverless::Function",
+      "Properties" : {
+        "Role" : null,
+        "MemorySize" : 512,
+        "Runtime" : "java11",
+        "Description" : null,
+        "Policies" : [ ],
+        "CodeUri" : "./target/aws-1.0.0.jar",
+        "Timeout" : 300,
+        "Handler" : "com.aws.function.Handler"
+      }
+    }
+  }
+}
