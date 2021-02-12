@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
@@ -27,8 +26,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         try {
             final String pageContents = this.getMessage();
 
-            //String output = String.format("{ \"message\": \"hello world\", \"location\": \"%s\" }", pageContents);
-            String output = "test";
+            String output = String.format("{ \"message\": \"hello world\", \"location\": \"%s\" }", pageContents);
 
             return response
                     .withStatusCode(200)
