@@ -5,9 +5,3 @@ timeout /t 2
 aws dynamodb scan --table-name test --endpoint-url http://10.3.0.233:7000
 
 timeout /t 5
-
-
-
-
---attribute-definitions AttributeName=Artist,AttributeType=S AttributeName=SongTitle,AttributeType=S \
-    --key-schema AttributeName=Artist,KeyType=HASH AttributeName=SongTitle,KeyType=RANGE 
