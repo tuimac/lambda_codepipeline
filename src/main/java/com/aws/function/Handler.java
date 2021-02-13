@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -23,11 +24,15 @@ import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
 
 public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-	
+
 	@Override
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
 		AmazonDynamoDB client;
-		String table = "test";
+		
+		final String table = "test";
+		final String key = "ID";
+		final String value = "3";
+		
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
         headers.put("X-Custom-Header", "application/json");
@@ -42,12 +47,12 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         				.build(); 
         	}else {
         		client = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(
-        				new AwsClientBuilder.EndpointConfiguration("http://localhost:7000", "ap-northeast-1"))
+        				new AwsClientBuilder.EndpointConfiguration("http://10.3.0.233:7000", "ap-northeast-1"))
         				.build(); 
         	}
         	DynamoDB dynamoDB = new DynamoDB(client);
         	
-        	String output = getItems(dynamoDB, table, "10");
+        	String output = getItems(dynamoDB, table, key, value);
             
             return response.withStatusCode(200).withBody(output);
         } catch(Exception e) {
@@ -55,38 +60,29 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             return response.withStatusCode(500).withBody(output);
         }
     }
-    public static String getItems(DynamoDB client, String tableName, String key) {
-        HashMap<String,AttributeValue> key_to_get = new HashMap<String,AttributeValue>();
+    public static String getItems(DynamoDB client, String tableName, String key, String value) {
+        HashMap<String,AttributeValue> condition = new HashMap<String,AttributeValue>();
 
-            key_to_get.put("DATABASE_NAME", new AttributeValue(name));
+            condition.put(key, new AttributeValue(value));
 
-            GetItemRequest request = null;
-            if (projection_expression != null) {
-                request = new GetItemRequest()
-                    .withKey(key_to_get)
-                    .withTableName(table_name)
-                    .withProjectionExpression(projection_expression);
-            } else {
-                request = new GetItemRequest()
-                    .withKey(key_to_get)
-                    .withTableName(table);
-            }
+            GetItemRequest request = new GetItemRequest()
+            	.withKey(condition)
+            	.withTableName(tableName);
 
             try {
-                Map<String,AttributeValue> returned_item =
-                   client.getItem(request).getItem();
-                if (returned_item != null) {
-                    Set<String> keys = returned_item.keySet();
-                    for (String key : keys) {
+                Map<String,AttributeValue> results = client.getItem(request).getItem();
+                if (results != null) {
+                    Set<String> items = results.keySet();
+                    for (String item : items) {
                         System.out.format("%s: %s\n",
-                                key, returned_item.get(key).toString());
+                                item, results.get(item).toString());
                     }
                 } else {
-                    System.out.format("No item found with the key %s!\n", name);
+                	String message = String.format("{ \"message\": \"No item found with the key %s!\" }", value);
                 }
             } catch (AmazonServiceException e) {
-                System.err.println(e.getErrorMessage());
-                System.exit(1);
+            	String message = String.format("{ \"message\": \"%s\" }", e);
+            	return message;
             }
     }
 }
