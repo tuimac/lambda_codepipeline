@@ -17,6 +17,8 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -61,28 +63,19 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         }
     }
     public static String getItems(DynamoDB client, String tableName, String key, String value) {
-        HashMap<String,AttributeValue> condition = new HashMap<String,AttributeValue>();
-
-            condition.put(key, new AttributeValue(value));
-
-            GetItemRequest request = new GetItemRequest()
-            	.withKey(condition)
-            	.withTableName(tableName);
-
-            try {
-                Map<String,AttributeValue> results = client.getItem(request).getItem();
-                if (results != null) {
-                    Set<String> items = results.keySet();
-                    for (String item : items) {
-                        System.out.format("%s: %s\n",
-                                item, results.get(item).toString());
-                    }
-                } else {
-                	String message = String.format("{ \"message\": \"No item found with the key %s!\" }", value);
-                }
-            } catch (AmazonServiceException e) {
-            	String message = String.format("{ \"message\": \"%s\" }", e);
-            	return message;
+        String message;
+        try {
+        	Table table = client.getTable(tableName);
+        	Item item = table.getItem(key, value);
+            if (item != null) {
+            	message = String.format("{ \"message\": %s\" }", item.toJSONPretty());
+            } else {
+            	message = String.format("{ \"message\": \"No item found with the key %s!\" }", value);
             }
+            return message;
+        } catch (AmazonServiceException e) {
+        	message = String.format("{ \"message\": \"%s\" }", e);
+        	return message;
+        }
     }
 }
