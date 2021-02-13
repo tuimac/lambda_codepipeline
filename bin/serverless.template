@@ -1,0 +1,13 @@
+{
+  "Description": "Just handler",
+  "Resources": {
+    "HelloWorld": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "com.aws.function.Handler",
+        "Runtime" : "java11",
+        "CodeUri" : "./target/ROOT.jar"
+      }
+    }
+  }
+}
