@@ -6,7 +6,12 @@
       "Properties": {
         "Handler": "com.aws.function.Handler",
         "Runtime" : "java11",
-        "CodeUri" : "./target/ROOT.jar"
+        "CodeUri" : "./target/ROOT.jar",
+        "Environment" : {
+          "Variables" : {
+            "ENDPOINT": "http://localhost:7000"
+          }
+        }
       }
     }
   }

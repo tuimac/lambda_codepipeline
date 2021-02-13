@@ -49,6 +49,10 @@
   </dependencyManagement>
 
   <dependencies>
+  	<dependency>
+  	  <groupId>com.amazonaws</groupId>
+  	  <artifactId>aws-java-sdk-dynamodb</artifactId>
+  	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
