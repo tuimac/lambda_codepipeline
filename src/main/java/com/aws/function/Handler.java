@@ -34,7 +34,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
 		
 		final String table = "test";
 		final String key = "ID";
-		final String value = "3";
+		final int value = 3;
 		
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -44,7 +44,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
                 .withHeaders(headers);
         try {
         	String endpoint = System.getenv("ENDPOINT");
-        	if(endpoint == "") {
+        	if(endpoint == null) {
         		client = AmazonDynamoDBClientBuilder.standard()
         				.withRegion(Regions.AP_NORTHEAST_1)
         				.build(); 
@@ -63,7 +63,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             return response.withStatusCode(500).withBody(output);
         }
     }
-    public static String getItems(DynamoDB client, String tableName, String key, String value) throws AmazonServiceException {
+    public static String getItems(DynamoDB client, String tableName, String key, int value) throws AmazonServiceException {
         String message;
         try {
         	Table table = client.getTable(tableName);
@@ -76,6 +76,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             }
             return message;
         } catch (AmazonServiceException e) {
+        	e.printStackTrace();
         	throw e;
         }
     }

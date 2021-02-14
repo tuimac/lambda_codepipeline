@@ -1,8 +1,0 @@
-INDEX VERSION 1.131+/Users/tuimac/github/lambda_codepipeline/.metadata/.plugins/org.eclipse.jdt.core
-3506184882.index
-2508974457.index
-2803513502.index
-3731968419.index
-349016200.index
-3319411183.index
-459432368.index
