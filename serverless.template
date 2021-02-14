@@ -1,12 +1,22 @@
 {
   "Description": "Just handler",
   "Resources": {
-    "Handler": {
+    "Function": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "com.aws.function.Handler",
         "Runtime" : "java11",
         "CodeUri" : "./target/ROOT.jar",
+        "Tracing" : "Active",
+        "Events" : {
+          "CatchAll": {
+            "Type" : "Api",
+            "Properties" : {
+              "Path" : "/handler",
+              "Method" : "GET"
+            }
+          }
+        },
         "Environment" : {
           "Variables" : {
             "ENDPOINT": "http://localhost:7000"

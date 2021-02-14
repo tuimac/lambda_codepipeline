@@ -19,6 +19,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -49,7 +50,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         				.build(); 
         	}else {
         		client = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(
-        				new AwsClientBuilder.EndpointConfiguration("http://localhost:7000", "ap-northeast-1"))
+        				new AwsClientBuilder.EndpointConfiguration(endpoint, "ap-northeast-1"))
         				.build(); 
         	}
         	DynamoDB dynamoDB = new DynamoDB(client);
@@ -58,7 +59,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             
             return response.withStatusCode(200).withBody(output);
         } catch(Exception e) {
-            String output = String.format("{ \"message\": \"%s\" }", e);
+            String output = String.format("{ \"message\": \"%s\" }", e.toString());
             return response.withStatusCode(500).withBody(output);
         }
     }
@@ -66,7 +67,8 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         String message;
         try {
         	Table table = client.getTable(tableName);
-        	Item item = table.getItem(key, value);
+        	GetItemSpec spec = new GetItemSpec().withPrimaryKey(key, value);
+        	Item item = table.getItem(spec);
             if (item != null) {
             	message = String.format("{ \"message\": %s\" }", item.toJSONPretty());
             } else {
