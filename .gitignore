@@ -1,5 +1,6 @@
 target
 .settings
+.metadata
 
 # Compiled class file
 *.class
