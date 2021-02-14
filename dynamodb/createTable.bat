@@ -3,5 +3,3 @@ aws dynamodb create-table --table-name test --endpoint-url http://10.3.0.233:700
 timeout /t 2
 
 aws dynamodb scan --table-name test --endpoint-url http://10.3.0.233:7000
-
-timeout /t 5

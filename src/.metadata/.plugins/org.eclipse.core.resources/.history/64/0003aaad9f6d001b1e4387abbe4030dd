@@ -1,0 +1,65 @@
+package com.aws.function;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
+import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
+import com.amazonaws.services.dynamodbv2.model.KeyType;
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
+
+public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+
+	
+	@Override
+    public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
+		AmazonDynamoDBClient dynamodb;
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        headers.put("X-Custom-Header", "application/json");
+
+        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
+                .withHeaders(headers);
+        try {
+        	String endpoint = System.getenv("ENDPOINT");
+        	if(endpoint == "") {
+        		dynamodb = new AmazonDynamoDBClient().withEndpoint("http://localhost:7000");
+        	}
+        	
+            final String pageContents = this.getMessage();
+
+            String output = String.format("{ \"message\": \"hello world\", \"location\": \"%s\" }", pageContents);
+            
+            
+            
+            
+            return response
+                    .withStatusCode(200)
+                    .withBody(output);
+        } catch(IOException e) {
+            String output = String.format("{ \"message\": \"%s\" }", e);
+            return response
+                    .withStatusCode(500)
+                    .withBody(output);
+        }
+    }
+
+    private String getMessage() throws IOException{
+        return "test";
+    }
+}

@@ -49,7 +49,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         				.build(); 
         	}else {
         		client = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(
-        				new AwsClientBuilder.EndpointConfiguration("http://10.3.0.233:7000", "ap-northeast-1"))
+        				new AwsClientBuilder.EndpointConfiguration("http://localhost:7000", "ap-northeast-1"))
         				.build(); 
         	}
         	DynamoDB dynamoDB = new DynamoDB(client);
@@ -62,7 +62,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             return response.withStatusCode(500).withBody(output);
         }
     }
-    public static String getItems(DynamoDB client, String tableName, String key, String value) {
+    public static String getItems(DynamoDB client, String tableName, String key, String value) throws AmazonServiceException {
         String message;
         try {
         	Table table = client.getTable(tableName);
@@ -74,8 +74,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             }
             return message;
         } catch (AmazonServiceException e) {
-        	message = String.format("{ \"message\": \"%s\" }", e);
-        	return message;
+        	throw e;
         }
     }
 }
