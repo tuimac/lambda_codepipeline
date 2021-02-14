@@ -59,6 +59,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             
             return response.withStatusCode(200).withBody(output);
         } catch(Exception e) {
+        	e.printStackTrace();
             String output = String.format("{ \"message\": \"%s\" }", e.toString());
             return response.withStatusCode(500).withBody(output);
         }
@@ -67,8 +68,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         String message;
         try {
         	Table table = client.getTable(tableName);
-        	GetItemSpec spec = new GetItemSpec().withPrimaryKey(key, value);
-        	Item item = table.getItem(spec);
+        	Item item = table.getItem(key, value, "NAME", "TOM");
             if (item != null) {
             	message = String.format("{ \"message\": %s\" }", item.toJSONPretty());
             } else {
@@ -76,7 +76,6 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             }
             return message;
         } catch (AmazonServiceException e) {
-        	e.printStackTrace();
         	throw e;
         }
     }
