@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
 
   <build>
-    <finalName>lambda-codepipeline</finalName>
+    <finalName>lambda_codepipeline</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
