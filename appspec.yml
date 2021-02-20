@@ -1,0 +1,6 @@
+version: 0.0
+Resources:
+  - LambdaCodepipeline:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: LambdaCodepipeline
