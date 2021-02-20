@@ -1,6 +1,9 @@
 version: 0.0
 Resources:
   - LambdaCodepipeline:
-      Type: AWS::Lambda::Function
+      Type: 'AWS::Lambda::Function'
       Properties:
-        Name: LambdaCodepipeline
+        Name: 'LambdaCodepipeline'
+        Alias: 'prd'
+        CurrentVersion: '1'
+        TargetVersion: '2'
