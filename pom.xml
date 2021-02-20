@@ -8,6 +8,7 @@
   <packaging>jar</packaging>
 
   <build>
+    <finalName>lambda-codepipeline</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -17,7 +18,6 @@
           <source>1.8</source>
           <target>1.8</target>
           <encoding>UTF-8</encoding>
-          <finalName>lambda_codepipeline</finalName>
           <forceJavacCompilerUse>true</forceJavacCompilerUse>
         </configuration>
       </plugin>
