@@ -9,4 +9,4 @@ phases:
       - mvn package
 artifacts:
   files:
-    - target/lambda_codepipeline.jar
+    - target/*.jar
