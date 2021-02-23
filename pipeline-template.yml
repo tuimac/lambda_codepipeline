@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create codepipeline template
+
+Parameters:
+  Artifact:
+    Type: String
+    Default: s3://test-codepipeline-000
+
