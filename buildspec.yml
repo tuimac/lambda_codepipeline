@@ -26,6 +26,7 @@ phases:
       - sed -i -e "s/{{FunctionName}}/$FunctionName/g" $AppSpec
       - sed -i -e "s/{{Alias}}/$Alias/g" $AppSpec
       - aws s3 cp $AppSpec $S3Bucket
+      - aws lambda update-function-code --function-name $FunctionName --zip-file fileb://target/lambda_codepipeline.jar
 artifacts:
   files:
     - target/*.jar
