@@ -4,6 +4,8 @@ env:
   variables:
     FunctionName: LambdaCodepipeline
     Alias: prd
+    AppSpec: deploy/appspec.yml
+    S3Bucket: s3://test-codepipeline-000
 phases:
   install:
     runtime-versions:
@@ -19,11 +21,11 @@ phases:
     commands:
       - aws lambda publish-version --function-name $FunctionName
       - TargetVersion=$(aws lambda list-versions-by-function --function-name $FuncionName | jq -r .Versions[-1].Version)
-      - sed -i -e "s/{{CurrentVersion}}/$CurrentVersion/g" appspec.yml
-      - sed -i -e "s/{{TargetVersion}}/$TargetVersion/g" appspec.yml
-      - sed -i -e "s/{{FunctionName}}/$FunctionName/g" appspec.yml
-      - sed -i -e "s/{{Alias}}/$Alias/g" appspec.yml
+      - sed -i -e "s/{{CurrentVersion}}/$CurrentVersion/g" $AppSpec
+      - sed -i -e "s/{{TargetVersion}}/$TargetVersion/g" $AppSpec
+      - sed -i -e "s/{{FunctionName}}/$FunctionName/g" $AppSpec
+      - sed -i -e "s/{{Alias}}/$Alias/g" $AppSpec
+      - aws s3 cp $AppSpec $S3Bucket
 artifacts:
   files:
     - target/*.jar
-    - deploy/appspec.yml
