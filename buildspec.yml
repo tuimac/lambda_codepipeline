@@ -20,4 +20,5 @@ phases:
       - aws s3 cp $Template $S3Bucket
 artifacts:
   files:
+    - deploy/serverless.yml
     - target/*.jar
