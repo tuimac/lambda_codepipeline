@@ -1,0 +1,18 @@
+Description: Just handler
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.aws.function.Handler
+      Runtime: java11
+      CodeUri: "./target/lambda_codepipeline.jar"
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: "/handler"
+            Method: GET
+      Environment:
+        Variables:
+          ENDPOINT: http://localhost:7000
